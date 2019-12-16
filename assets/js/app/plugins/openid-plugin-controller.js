@@ -224,25 +224,25 @@
             require_id_token: true,
             custom_headers: [{
               header_name: 'http-kong-id-token-{*}',
-              value: 'id_token',
+              value_lua_exp: 'id_token',
               format: 'string',
               sep: ' ',
               iterate: true,
             }, {
               header_name: 'http-kong-userinfo-{*}',
-              value: 'userinfo',
+              value_lua_exp: 'userinfo',
               format: 'string',
               sep: ' ',
               iterate: true,
             }, {
               header_name: 'http-kong-userinfo',
-              value: 'userinfo',
+              value_lua_exp: 'userinfo',
               format: 'jwt',
               iterate: false,
               sep: ' ',
             }, {
               header_name: 'http-kong-id-token',
-              value: 'id_token',
+              value_lua_exp: 'id_token',
               format: 'jwt',
               iterate: false,
               sep: ' ',
@@ -1208,7 +1208,7 @@
           }
           $scope.pluginConfig.custom_headers.push({
             header_name: 'http-kong-custom',
-            value: 'any_value',
+            value_lua_exp: 'any_value',
             format: 'string',
             iterate: false,
             sep: ' ',
