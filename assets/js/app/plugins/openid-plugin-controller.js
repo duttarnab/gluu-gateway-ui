@@ -1221,7 +1221,55 @@
             templateUrl: 'js/app/plugins/modals/custom-headers-guide.html',
             size: 'lg',
             controller: ['$uibModalInstance', '$scope', function ($uibModalInstance, $scope) {
-
+              $scope.examples = [{
+                headerName: 'kong-openidc-id-token',
+                value: 'id_token',
+                format: '[jwt | base64]',
+                separator: '',
+                Iterate: 'No'
+              },{
+                headerName: 'kong-openidc-userinfo',
+                value: 'userinfo',
+                format: '[jwt | base64]',
+                separator: '',
+                Iterate: 'No'
+              },{
+                headerName: 'kong-openidc-id-token-{*}',
+                value: 'id_token',
+                format: '[string | urlencoded | base64]',
+                separator: '',
+                Iterate: 'Yes'
+              },{
+                headerName: 'kong-openidc-userinfo-{*}',
+                value: 'userinfo',
+                format: '[string | urlencoded | base64]',
+                separator: '',
+                Iterate: 'Yes'
+              },{
+                headerName: 'kong-openidc-userinfo-email',
+                value: 'userinfo.email',
+                format: '[string | urlencoded | base64]',
+                separator: '',
+                Iterate: 'No'
+              },{
+                headerName: 'kong-openidc-id-token-exp',
+                value: 'id_token.exp',
+                format: '[string | base64]',
+                separator: '',
+                Iterate: 'No'
+              },{
+                headerName: 'kong-version',
+                value: '"version 1.3", Note: double quotes required for custom values.',
+                format: '[string | urlencoded | base64]',
+                separator: '',
+                Iterate: 'No'
+              },{
+                headerName: 'kong-userinfo-roles',
+                value: 'userinfo.roles',
+                format: '[list]',
+                separator: ', (comma)',
+                Iterate: 'No'
+              },]
             }],
           }).result.then(function (result) {
           });

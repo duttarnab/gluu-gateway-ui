@@ -15,13 +15,7 @@
         </tr>
         <tr>
           <td><code>Header Value</code></td>
-          <td>the expression, define the value in the environment, for example userinfo.email For OpenID Connect use
-            case the environment is populated with 2 root values <code>id_token</code> and <code>userinfo</code>. If you
-            not use environment values then plugin will proceed with the given values. Example:
-            <ul>
-              <li>Environment values: <code>userinfo</code>, <code>userinfo.email</code>, <code>id_token</code>, <code>id_token.exp</code> </li>
-              <li>Any Custom vaues: <code>123</code>, <code>abcd</code>, <code>version 4</code>, etc... </li>
-            </ul>
+          <td>It is the lua expression which will populate the environment values. <code>Note: For custom values you need to pass value in double quotes("value")</code>
           </td>
         </tr>
         <tr>
@@ -49,61 +43,12 @@
           <th>Separator</th>
           <th>Iterate</th>
         </tr>
-        <tr>
-          <td>kong-openidc-id-token</td>
-          <td>id_token</td>
-          <td>[jwt | base64]</td>
-          <td></td>
-          <td>No</td>
-        </tr>
-        <tr>
-          <td>kong-openidc-userinfo</td>
-          <td>userinfo</td>
-          <td>[jwt | base64]</td>
-          <td></td>
-          <td>No</td>
-        </tr>
-        <tr>
-          <td>kong-openidc-id-token-{*}</td>
-          <td>id_token</td>
-          <td>[string | urlencoded | base64]</td>
-          <td></td>
-          <td>Yes</td>
-        </tr>
-        <tr>
-          <td>kong-openidc-userinfo-{*}</td>
-          <td>userinfo</td>
-          <td>[string | urlencoded | base64]</td>
-          <td></td>
-          <td>Yes</td>
-        </tr>
-        <tr>
-          <td>kong-openidc-userinfo-email</td>
-          <td>userinfo.email</td>
-          <td>[string | urlencoded | base64]</td>
-          <td></td>
-          <td>No</td>
-        </tr>
-        <tr>
-          <td>kong-openidc-id-token-exp</td>
-          <td>id_token.exp</td>
-          <td>[string | base64]</td>
-          <td></td>
-          <td>No</td>
-        </tr>
-        <tr>
-          <td>kong-version</td>
-          <td>"version 1.3" <code> - double quotes required for custom values. </code></td>
-          <td>[string | urlencoded | base64]</td>
-          <td></td>
-          <td>No</td>
-        </tr>
-        <tr>
-          <td>kong-userinfo-roles</td>
-          <td>userinfo.roles</td>
-          <td>list</td>
-          <td><h3>,</h3> (comma)</td>
-          <td>No</td>
+        <tr data-ng-repeat="path in examples">
+          <td>{{path.headerName}}</td>
+          <td>{{path.value}}</td>
+          <td>{{path.format}}</td>
+          <td>{{path.separator}}</td>
+          <td>{{path.Iterate}}</td>
         </tr>
       </table>
     </div>

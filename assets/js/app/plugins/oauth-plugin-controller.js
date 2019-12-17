@@ -23,7 +23,10 @@
         $scope.removeGroup = removeGroup;
         $scope.fetchData = fetchData;
         $scope.showPathPossibilities = showPathPossibilities;
+        $scope.addCustomHeader = addCustomHeader;
+        $scope.showCustomHeadersGuide = showCustomHeadersGuide;
         $scope.passCredentials = ['pass', 'hide', 'phantom_token'];
+        $scope.headerFormats = ["string", "jwt", "base64", "urlencoded", "list"];
         $scope.isAllowPEP = true;
 
         if (_context_name == 'service') {
@@ -45,7 +48,38 @@
             client_secret: $scope.globalInfo.clientSecret,
             oauth_scope_expression: [],
             deny_by_default: true,
-            pass_credentials: "pass"
+            pass_credentials: "pass",
+            custom_headers: [{
+              header_name: 'x-consumer-id',
+              value_lua_exp: 'consumer.id',
+              format: 'string',
+              sep: ' ',
+              iterate: false,
+            }, {
+              header_name: 'x-oauth-client-id',
+              value_lua_exp: 'introspect_data.client_id',
+              format: 'string',
+              sep: ' ',
+              iterate: false,
+            }, {
+              header_name: 'x-consumer-custom-id',
+              value_lua_exp: 'introspect_data.client_id',
+              format: 'string',
+              iterate: false,
+              sep: ' ',
+            }, {
+              header_name: 'x-oauth-expiration',
+              value_lua_exp: 'introspect_data.exp',
+              format: 'string',
+              iterate: false,
+              sep: ' ',
+            }, {
+              header_name: 'x-authenticated-scope',
+              value_lua_exp: 'introspect_data.scope',
+              format: 'list',
+              iterate: false,
+              sep: ',',
+            }]
           }
         };
 
@@ -356,7 +390,8 @@
                   op_url: model.config.op_url,
                   oxd_url: model.config.oxd_url,
                   anonymous: model.config.anonymous,
-                  pass_credentials: model.config.pass_credentials
+                  pass_credentials: model.config.pass_credentials,
+                  custom_headers: model.config.custom_headers || []
                 }
               };
               if ($scope.context_name) {
@@ -445,7 +480,8 @@
               op_url: model.config.op_url,
               oxd_url: model.config.oxd_url,
               anonymous: model.config.anonymous,
-              pass_credentials: model.config.pass_credentials
+              pass_credentials: model.config.pass_credentials,
+              custom_headers: model.config.custom_headers || []
             }
           };
           if ($scope.context_name) {
@@ -681,6 +717,74 @@
             }],
           }).result.then(function (result) {
 
+          });
+        }
+
+        function addCustomHeader() {
+          var custom_headers = $scope.modelPlugin.config.custom_headers;
+          if (!custom_headers || custom_headers.length <= 0) {
+            custom_headers = []
+          }
+          custom_headers.push({
+            header_name: 'http-kong-custom',
+            value_lua_exp: 'any_value',
+            format: 'string',
+            iterate: false,
+            sep: ' ',
+          })
+        }
+
+        function showCustomHeadersGuide() {
+          $uibModal.open({
+            animation: true,
+            templateUrl: 'js/app/plugins/modals/custom-headers-guide.html',
+            size: 'lg',
+            controller: ['$uibModalInstance', '$scope', function ($uibModalInstance, $scope) {
+              $scope.examples = [{
+                header_name: 'x-consumer-id',
+                value_lua_exp: 'consumer.id',
+                format: 'string',
+                sep: ' ',
+                iterate: false,
+              }, {
+                header_name: 'x-oauth-client-id',
+                value_lua_exp: 'introspect_data.client_id',
+                format: 'string',
+                sep: ' ',
+                iterate: false,
+              }, {
+                header_name: 'x-consumer-custom-id',
+                value_lua_exp: 'introspect_data.client_id',
+                format: 'string',
+                iterate: false,
+                sep: ' ',
+              }, {
+                header_name: 'x-oauth-expiration',
+                value_lua_exp: 'introspect_data.exp',
+                format: 'string',
+                iterate: false,
+                sep: ' ',
+              }, {
+                header_name: 'x-authenticated-scope',
+                value_lua_exp: 'introspect_data.scope',
+                format: 'list',
+                iterate: false,
+                sep: ',',
+              },{
+                headerName: 'x-oauth-token-{*}',
+                value: 'introspect_data',
+                format: '[string | urlencoded | base64]',
+                separator: '',
+                Iterate: 'Yes'
+              },{
+                headerName: 'kong-version',
+                value: '"version 1.3", Note: double quotes required for custom values.',
+                format: '[string | urlencoded | base64]',
+                separator: '',
+                Iterate: 'No'
+              }]
+            }],
+          }).result.then(function (result) {
           });
         }
 
