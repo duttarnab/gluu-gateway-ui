@@ -40,8 +40,7 @@
                 <label>1. UMA PEP Scope expression configuration</label>
                 <input switch-readonly="true" switch-on-text="Enabled" switch-off-text="Disabled" bs-switch
                        type="checkbox" switch-size="small"
-                       ng-model="modelPlugin.isPEPEnabled" class="form-control"
-                       switch-change="modelPlugin.config.deny_by_default = modelPlugin.isPEPEnabled"/>
+                       ng-model="modelPlugin.isPEPEnabled" class="form-control"/>
 
                 <span class="help-block error-block basic-block">Enable plugin first using above button to configure UMA PEP. It protect API paths by requiring specific UMA Scopes for certain methods. Click on <code>Add Path</code> button to start.</span>
                 <span>There is dynamic path facility. Click <a ng-click="showPathPossibilities()" href>here for possible dynamic path expressions</a></span>

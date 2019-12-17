@@ -42,8 +42,7 @@
                 <div class="form-group has-feedback">
                   <label>1. OAUTH PEP Scope expression configuration</label> &nbsp;&nbsp;&nbsp;
                   <input switch-on-text="Enabled" switch-off-text="Disabled" bs-switch type="checkbox" switch-size="small"
-                         ng-model="modelPlugin.isPEPEnabled" class="form-control"
-                         switch-change="modelPlugin.config.deny_by_default = modelPlugin.isPEPEnabled"/>
+                         ng-model="modelPlugin.isPEPEnabled" class="form-control"/>
 
                   <span class="help-block error-block basic-block">Enable first to configure OAuth PEP. Protect API paths by requiring specific OAuth Scopes for certain methods. Click on <code>Add Path</code> button to start.</span>
                   <span>There is dynamic path facility. Click <a ng-click="showPathPossibilities()" href>here for possible dynamic path expressions</a></span>
