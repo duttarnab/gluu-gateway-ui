@@ -721,10 +721,8 @@
         }
 
         function addCustomHeader() {
+          $scope.modelPlugin.config.custom_headers = $scope.modelPlugin.config.custom_headers || [];
           var custom_headers = $scope.modelPlugin.config.custom_headers;
-          if (!custom_headers || custom_headers.length <= 0) {
-            custom_headers = []
-          }
           custom_headers.push({
             header_name: 'http-kong-custom',
             value_lua_exp: 'any_value',
@@ -741,35 +739,35 @@
             size: 'lg',
             controller: ['$uibModalInstance', '$scope', function ($uibModalInstance, $scope) {
               $scope.examples = [{
-                header_name: 'x-consumer-id',
-                value_lua_exp: 'consumer.id',
+                headerName: 'x-consumer-id',
+                value: 'consumer.id',
                 format: 'string',
-                sep: ' ',
-                iterate: false,
+                separator: ' ',
+                Iterate: false,
               }, {
-                header_name: 'x-oauth-client-id',
-                value_lua_exp: 'introspect_data.client_id',
+                headerName: 'x-oauth-client-id',
+                value: 'introspect_data.client_id',
                 format: 'string',
-                sep: ' ',
-                iterate: false,
+                separator: ' ',
+                Iterate: false,
               }, {
-                header_name: 'x-consumer-custom-id',
-                value_lua_exp: 'introspect_data.client_id',
+                headerName: 'x-consumer-custom-id',
+                value: 'introspect_data.client_id',
                 format: 'string',
-                iterate: false,
-                sep: ' ',
+                Iterate: false,
+                separator: ' ',
               }, {
-                header_name: 'x-oauth-expiration',
-                value_lua_exp: 'introspect_data.exp',
+                headerName: 'x-oauth-expiration',
+                value: 'introspect_data.exp',
                 format: 'string',
-                iterate: false,
-                sep: ' ',
+                Iterate: false,
+                separator: ' ',
               }, {
-                header_name: 'x-authenticated-scope',
-                value_lua_exp: 'introspect_data.scope',
+                headerName: 'x-authenticated-scope',
+                value: 'introspect_data.scope',
                 format: 'list',
-                iterate: false,
-                sep: ',',
+                Iterate: false,
+                separator: ', (comma)',
               },{
                 headerName: 'x-oauth-token-{*}',
                 value: 'introspect_data',
