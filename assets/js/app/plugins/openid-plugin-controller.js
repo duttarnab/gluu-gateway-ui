@@ -1269,7 +1269,13 @@
                 format: '[list]',
                 separator: ', (comma)',
                 Iterate: 'No'
-              },]
+              },{
+                headerName: 'gg-access-token',
+                value: 'access_token',
+                format: '[string| urlencoded | base64]',
+                separator: '',
+                Iterate: 'No'
+              }]
             }],
           }).result.then(function (result) {
           });

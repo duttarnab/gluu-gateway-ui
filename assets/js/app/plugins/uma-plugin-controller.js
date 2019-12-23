@@ -832,24 +832,24 @@
                 value: 'consumer.id',
                 format: 'string',
                 separator: ' ',
-                Iterate: false,
+                Iterate: 'No',
               }, {
                 headerName: 'x-oauth-client-id',
                 value: 'introspect_data.client_id',
                 format: 'string',
                 separator: ' ',
-                Iterate: false,
+                Iterate: 'No',
               }, {
                 headerName: 'x-consumer-custom-id',
                 value: 'introspect_data.client_id',
                 format: 'string',
-                Iterate: false,
+                Iterate: 'No',
                 separator: ' ',
               }, {
                 headerName: 'x-rpt-expiration',
                 value: 'introspect_data.exp',
                 format: 'string',
-                Iterate: false,
+                Iterate: 'No',
                 separator: ' ',
               }, {
                 headerName: 'x-oauth-token-{*}',
