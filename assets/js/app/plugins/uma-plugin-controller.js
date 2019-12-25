@@ -48,6 +48,7 @@
             ignore_scope: false,
             deny_by_default: true,
             pass_credentials: 'pass',
+            consumer_mapping: true,
             custom_headers: [{
               header_name: 'x-consumer-id',
               value_lua_exp: 'consumer.id',
@@ -384,7 +385,8 @@
                   oxd_url: model.config.oxd_url,
                   anonymous: model.config.anonymous,
                   pass_credentials: model.config.pass_credentials,
-                  custom_headers: model.config.custom_headers || []
+                  custom_headers: model.config.custom_headers || [],
+                  consumer_mapping: model.config.consumer_mapping,
                 }
               };
               if ($scope.context_name) {
@@ -482,7 +484,8 @@
                   oxd_url: model.config.oxd_url,
                   anonymous: model.config.anonymous,
                   pass_credentials: model.config.pass_credentials,
-                  custom_headers: model.config.custom_headers || []
+                  custom_headers: model.config.custom_headers || [],
+                  consumer_mapping: model.config.consumer_mapping,
                 }
               };
               if ($scope.context_name) {
