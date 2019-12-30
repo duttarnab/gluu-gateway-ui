@@ -14,7 +14,6 @@
         $scope.plugins = _plugins.data.data;
         $scope.oauthPlugin = null;
         $scope.addNewScope = addNewScope;
-        $scope.managePlugin = managePlugin;
         $scope.getDiscoveryResponse = getDiscoveryResponse;
         $scope.customHeaders = [['CUSTOM_NUMBER', '123321123']];
         $scope.claimSupported = [['role', '==', '[Mm][Aa]']];
@@ -101,6 +100,7 @@
             $scope.pluginConfig.deny_by_default = pepPlugin.config.deny_by_default;
             $scope.pluginConfig.redirect_claim_gathering_url = pepPlugin.config.redirect_claim_gathering_url || false;
             $scope.pluginConfig.claims_redirect_path = pepPlugin.config.claims_redirect_path || "";
+            $scope.pluginConfig.pushed_claims_lua_exp = pepPlugin.config.pushed_claims_lua_exp;
 
             $scope.pluginConfig.require_id_token = pepPlugin.config.require_id_token;
             $scope.pluginConfig.uma_scope_expression = JSON.parse(pepPlugin.config.uma_scope_expression) || [];
@@ -184,6 +184,7 @@
             $scope.pluginConfig.require_id_token = true;
             $scope.pluginConfig.redirect_claim_gathering_url = false;
             $scope.pluginConfig.claims_redirect_path = "";
+            $scope.pluginConfig.pushed_claims_lua_exp = "{id_token=id_token,userinfo=userinfo}";
             setClaimPath()
           }
         } else {
@@ -222,6 +223,7 @@
             max_id_token_auth_age_type: 'minutes',
             uma_scope_expression: [],
             require_id_token: true,
+            pushed_claims_lua_exp: "{id_token=id_token,userinfo=userinfo}",
             custom_headers: [{
               header_name: 'http-kong-id-token-{*}',
               value_lua_exp: 'id_token',
@@ -464,56 +466,93 @@
         }
 
         function addPlugin(model) {
-          PluginsService
-            .addOPClient({
-              client_name: 'gg-openid-connect-client',
-              op_host: model.op_url,
+          var max_id_token_age = getSeconds(model.max_id_token_age_value, model.max_id_token_age_type);
+          var max_id_token_auth_age = getSeconds(model.max_id_token_auth_age_value, model.max_id_token_auth_age_type);
+          if (model.post_logout_redirect_uri.startsWith(model.kong_proxy_url)) {
+            model.post_logout_redirect_path_or_url = model.post_logout_redirect_uri.replace(model.kong_proxy_url, '');
+          } else {
+            model.post_logout_redirect_path_or_url = model.post_logout_redirect_uri
+          }
+
+          var oidcPluginModel = {
+            name: 'gluu-openid-connect',
+            route: {
+              id: $scope.route.id
+            },
+            tags: model.tags || null,
+            config: {
+              oxd_id: "schema-test",
               oxd_url: model.oxd_url,
-              redirect_uris: [model.kong_proxy_url + model.authorization_redirect_path],
-              post_logout_redirect_uris: [model.post_logout_redirect_uri],
-              claims_redirect_uri: [model.kong_proxy_url + model.claims_redirect_path],
-              scope: model.requested_scopes,
-              acr_values: model.required_acrs || null,
-              route_id: $scope.route.id,
-              comment: model.comment,
-              uma_scope_expression: model.uma_scope_expression || [],
+              client_id: "schema-test",
+              client_secret: "schema-test",
+              op_url: model.op_url,
+              authorization_redirect_path: model.authorization_redirect_path,
+              logout_path: model.logout_path,
+              post_logout_redirect_path_or_url: model.post_logout_redirect_path_or_url,
+              requested_scopes: model.requested_scopes,
+              // required_acrs: model.required_acrs || null,
+              required_acrs_expression: (model.required_acrs_expression && JSON.stringify(model.required_acrs_expression)) || null,
+              max_id_token_age: max_id_token_age,
+              max_id_token_auth_age: max_id_token_auth_age,
+              custom_headers: model.custom_headers || []
+            }
+          };
+
+          var pepModel = {};
+          if (model.isPEPEnabled) {
+            pepModel = {
+              name: 'gluu-uma-pep',
+              route: {
+                id: $scope.route.id
+              },
+              config: {
+                oxd_id: "schema_test",
+                client_id: "schema_test",
+                client_secret: "schema_test",
+                op_url: model.op_url,
+                oxd_url: model.oxd_url,
+                uma_scope_expression: JSON.stringify(model.uma_scope_expression),
+                deny_by_default: model.deny_by_default || false,
+                require_id_token: model.require_id_token || false,
+                obtain_rpt: true,
+                redirect_claim_gathering_url: model.redirect_claim_gathering_url || false,
+                claims_redirect_path: model.claims_redirect_path,
+                pushed_claims_lua_exp: model.pushed_claims_lua_exp || ""
+              }
+            };
+          }
+
+          PluginsService.validateSchema('plugins', oidcPluginModel)
+            .then(function (response) {
+              if(model.isPEPEnabled) {
+                return PluginsService.validateSchema('plugins', pepModel)
+              }
+            })
+            .then(function (response) {
+              return PluginsService
+                .addOPClient({
+                  client_name: 'gg-openid-connect-client',
+                  op_host: model.op_url,
+                  oxd_url: model.oxd_url,
+                  redirect_uris: [model.kong_proxy_url + model.authorization_redirect_path],
+                  post_logout_redirect_uris: [model.post_logout_redirect_uri],
+                  claims_redirect_uri: [model.kong_proxy_url + model.claims_redirect_path],
+                  scope: model.requested_scopes,
+                  acr_values: model.required_acrs || null,
+                  route_id: $scope.route.id,
+                  comment: model.comment,
+                  uma_scope_expression: model.uma_scope_expression || [],
+                });
             })
             .then(function (response) {
               var opClient = response.data;
-              var max_id_token_age = getSeconds(model.max_id_token_age_value, model.max_id_token_age_type);
-              var max_id_token_auth_age = getSeconds(model.max_id_token_auth_age_value, model.max_id_token_auth_age_type);
-              if (model.post_logout_redirect_uri.startsWith(model.kong_proxy_url)) {
-                model.post_logout_redirect_path_or_url = model.post_logout_redirect_uri.replace(model.kong_proxy_url, '');
-              } else {
-                model.post_logout_redirect_path_or_url = model.post_logout_redirect_uri
-              }
-              var pluginModel = {
-                name: 'gluu-openid-connect',
-                route: {
-                  id: $scope.route.id
-                },
-                tags: model.tags || null,
-                config: {
-                  oxd_id: opClient.oxd_id,
-                  oxd_url: model.oxd_url,
-                  client_id: opClient.client_id,
-                  client_secret: opClient.client_secret,
-                  op_url: model.op_url,
-                  authorization_redirect_path: model.authorization_redirect_path,
-                  logout_path: model.logout_path,
-                  post_logout_redirect_path_or_url: model.post_logout_redirect_path_or_url,
-                  requested_scopes: model.requested_scopes,
-                  // required_acrs: model.required_acrs || null,
-                  required_acrs_expression: (model.required_acrs_expression && JSON.stringify(model.required_acrs_expression)) || null,
-                  max_id_token_age: max_id_token_age,
-                  max_id_token_auth_age: max_id_token_auth_age,
-                  custom_headers: model.custom_headers || []
-                }
-              };
+              oidcPluginModel.config.oxd_id = opClient.oxd_id;
+              oidcPluginModel.config.client_id = opClient.client_id;
+              oidcPluginModel.config.client_secret = opClient.client_secret;
 
               return new Promise(function (resolve, reject) {
                 return PluginHelperService.addPlugin(
-                  pluginModel,
+                  oidcPluginModel,
                   function success(res) {
                     return resolve(opClient);
                   }, function (err) {
@@ -527,34 +566,20 @@
                 $state.go("routes");
                 return
               }
+              pepModel.config.oxd_id = opClient.oxd_id;
+              pepModel.config.client_id = opClient.client_id;
+              pepModel.config.client_secret = opClient.client_secret;
 
-              // var uma_scope_expression = removeExtraScope(model.uma_scope_expression);
-              var pepModel = {
-                name: 'gluu-uma-pep',
-                route: {
-                  id: $scope.route.id
-                },
-                config: {
-                  oxd_id: opClient.oxd_id,
-                  client_id: opClient.client_id,
-                  client_secret: opClient.client_secret,
-                  op_url: model.op_url,
-                  oxd_url: model.oxd_url,
-                  uma_scope_expression: JSON.stringify(model.uma_scope_expression),
-                  deny_by_default: model.deny_by_default || false,
-                  require_id_token: model.require_id_token || false,
-                  obtain_rpt: true,
-                  redirect_claim_gathering_url: model.redirect_claim_gathering_url || false,
-                  claims_redirect_path: model.claims_redirect_path,
-                }
-              };
-              return PluginHelperService.addPlugin(pepModel,
-                function success(res) {
-                  $state.go("routes");
-                  MessageService.success('Gluu OpenID Connect and UMA PEP Plugin added successfully!');
-                }, function (err) {
-                  return Promise.reject(err);
-                });
+              return new Promise(function (resolve, reject) {
+                return PluginHelperService.addPlugin(pepModel,
+                  function success(res) {
+                    $state.go("routes");
+                    MessageService.success('Gluu OpenID Connect and UMA PEP Plugin added successfully!');
+                    return resolve();
+                  }, function (err) {
+                    return reject(err);
+                  });
+              });
             })
             .catch(function (error) {
               $scope.busy = false;
@@ -660,32 +685,36 @@
                   obtain_rpt: true,
                   redirect_claim_gathering_url: model.redirect_claim_gathering_url || false,
                   claims_redirect_path: model.claims_redirect_path,
+                  pushed_claims_lua_exp: model.pushed_claims_lua_exp || ""
                 }
               };
 
-              if (model.pepId) {
-                return PluginHelperService.updatePlugin(model.pepId, pepModel,
-                  success,
-                  error);
-              } else {
-                return PluginHelperService.addPlugin(
-                  pepModel,
-                  success,
-                  error);
-              }
-
-              function success(res, msg) {
-                $state.go("routes");
+              return new Promise(function (resolve, reject) {
                 if (model.pepId) {
-                  MessageService.success('Gluu OpenID Connect and UMA PEP Plugin updated successfully!');
+                  return PluginHelperService.updatePlugin(model.pepId, pepModel,
+                    success,
+                    error);
                 } else {
-                  MessageService.success('Gluu OpenID Connect updated and UMA PEP Plugin added successfully!');
+                  return PluginHelperService.addPlugin(
+                    pepModel,
+                    success,
+                    error);
                 }
-              }
 
-              function error(err) {
-                return Promise.reject(err);
-              }
+                function success(res, msg) {
+                  $state.go("routes");
+                  if (model.pepId) {
+                    MessageService.success('Gluu OpenID Connect and UMA PEP Plugin updated successfully!');
+                  } else {
+                    MessageService.success('Gluu OpenID Connect updated and UMA PEP Plugin added successfully!');
+                  }
+                  return resolve();
+                }
+
+                function error(err) {
+                  reject(err);
+                }
+              })
             })
             .catch(function (error) {
               $scope.busy = false;
@@ -1227,49 +1256,49 @@
                 format: '[jwt | base64]',
                 separator: '',
                 Iterate: 'No'
-              },{
+              }, {
                 headerName: 'kong-openidc-userinfo',
                 value: 'userinfo',
                 format: '[jwt | base64]',
                 separator: '',
                 Iterate: 'No'
-              },{
+              }, {
                 headerName: 'kong-openidc-id-token-{*}',
                 value: 'id_token',
                 format: '[string | urlencoded | base64]',
                 separator: '',
                 Iterate: 'Yes'
-              },{
+              }, {
                 headerName: 'kong-openidc-userinfo-{*}',
                 value: 'userinfo',
                 format: '[string | urlencoded | base64]',
                 separator: '',
                 Iterate: 'Yes'
-              },{
+              }, {
                 headerName: 'kong-openidc-userinfo-email',
                 value: 'userinfo.email',
                 format: '[string | urlencoded | base64]',
                 separator: '',
                 Iterate: 'No'
-              },{
+              }, {
                 headerName: 'kong-openidc-id-token-exp',
                 value: 'id_token.exp',
                 format: '[string | base64]',
                 separator: '',
                 Iterate: 'No'
-              },{
+              }, {
                 headerName: 'kong-version',
                 value: '"version 1.3", Note: double quotes required for custom values.',
                 format: '[string | urlencoded | base64]',
                 separator: '',
                 Iterate: 'No'
-              },{
+              }, {
                 headerName: 'kong-userinfo-roles',
                 value: 'userinfo.roles',
                 format: '[list]',
                 separator: ', (comma)',
                 Iterate: 'No'
-              },{
+              }, {
                 headerName: 'gg-access-token',
                 value: 'access_token',
                 format: '[string| urlencoded | base64]',
