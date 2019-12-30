@@ -59,6 +59,10 @@
             return $http.post('api/clients/op', data)
           },
 
+          validateSchema: function (entity, data) {
+            return $http.post('kong/schemas/'+entity+'/validate', data)
+          },
+
           registerClientAndResources: function (data) {
             return $http.post('api/clients/uma', data)
           },

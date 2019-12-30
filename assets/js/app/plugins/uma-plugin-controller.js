@@ -362,38 +362,68 @@
           } else {
             return MessageService.error('UMA Scope Expression is required');
           }
-          PluginsService
-            .registerClientAndResources({
-              oxd_id: model.config.oxd_id || null,
-              client_id: model.config.client_id || null,
-              client_secret: model.config.client_secret || null,
-              uma_scope_expression: uma_scope_expression,
-              client_name: 'gluu-uma-client',
-              op_host: model.config.op_url,
-              oxd_url: model.config.oxd_url
+
+          var authModel = {
+            name: 'gluu-uma-auth',
+            tags: model.tags || null,
+            config: {
+              oxd_id: "schema_testing",
+              client_id: "schema_testing",
+              client_secret: "schema_testing",
+              op_url: model.config.op_url,
+              oxd_url: model.config.oxd_url,
+              anonymous: model.config.anonymous,
+              pass_credentials: model.config.pass_credentials,
+              custom_headers: model.config.custom_headers || [],
+              consumer_mapping: model.config.consumer_mapping,
+            }
+          };
+
+          var pepModel = {
+            name: 'gluu-uma-pep',
+            config: {
+              oxd_id: "schema_testing",
+              client_id: "schema_testing",
+              client_secret: "schema_testing",
+              op_url: model.config.op_url,
+              oxd_url: model.config.oxd_url,
+              uma_scope_expression: model.config.uma_scope_expression,
+              deny_by_default: model.config.deny_by_default || false
+            }
+          };
+
+          if ($scope.context_name) {
+            authModel[$scope.context_name] ={
+              id: $scope.context_data.id
+            };
+            pepModel[$scope.context_name] ={
+              id: $scope.context_data.id
+            }
+          }
+
+          PluginsService.validateSchema('plugins', authModel)
+            .then(function (response) {
+              if(model.isPEPEnabled) {
+                return PluginsService.validateSchema('plugins', pepModel)
+              }
+            })
+            .then(function (response) {
+              return PluginsService.registerClientAndResources({
+                oxd_id: model.config.oxd_id || null,
+                client_id: model.config.client_id || null,
+                client_secret: model.config.client_secret || null,
+                uma_scope_expression: uma_scope_expression,
+                client_name: 'gluu-uma-client',
+                op_host: model.config.op_url,
+                oxd_url: model.config.oxd_url
+              })
             })
             .then(function (response) {
               var oauthClient = response.data;
-              var authModel = {
-                name: 'gluu-uma-auth',
-                tags: model.tags || null,
-                config: {
-                  oxd_id: oauthClient.oxd_id,
-                  client_id: oauthClient.client_id,
-                  client_secret: oauthClient.client_secret,
-                  op_url: model.config.op_url,
-                  oxd_url: model.config.oxd_url,
-                  anonymous: model.config.anonymous,
-                  pass_credentials: model.config.pass_credentials,
-                  custom_headers: model.config.custom_headers || [],
-                  consumer_mapping: model.config.consumer_mapping,
-                }
-              };
-              if ($scope.context_name) {
-                authModel[$scope.context_name] ={
-                  id: $scope.context_data.id
-                };
-              }
+              authModel.config.oxd_id = oauthClient.oxd_id;
+              authModel.config.client_id = oauthClient.client_id;
+              authModel.config.client_secret = oauthClient.client_secret;
+
               return new Promise(function (resolve, reject) {
                 PluginHelperService.addPlugin(
                   authModel,
@@ -405,23 +435,10 @@
               });
             })
             .then(function (oauthClient) {
-              var pepModel = {
-                name: 'gluu-uma-pep',
-                config: {
-                  oxd_id: oauthClient.oxd_id,
-                  client_id: oauthClient.client_id,
-                  client_secret: oauthClient.client_secret,
-                  op_url: model.config.op_url,
-                  oxd_url: model.config.oxd_url,
-                  uma_scope_expression: model.config.uma_scope_expression,
-                  deny_by_default: model.config.deny_by_default || false
-                }
-              };
-              if ($scope.context_name) {
-                pepModel[$scope.context_name] ={
-                  id: $scope.context_data.id
-                }
-              }
+              pepModel.config.oxd_id = oauthClient.oxd_id;
+              pepModel.config.client_id = oauthClient.client_id;
+              pepModel.config.client_secret = oauthClient.client_secret;
+
               return PluginHelperService.addPlugin(
                 pepModel,
                 function success(res) {
