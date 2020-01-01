@@ -40,10 +40,10 @@ module.exports = {
       host: process.env.DB_HOST || 'localhost',
       user: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || 'admin',
-      port: process.env.DB_PORT || 5432,
+      port: process.env.DB_PORT && parseInt(process.env.DB_PORT) || 5432,
       database: process.env.DB_DATABASE || 'konga',
-      poolSize: process.env.DB_POOLSIZE || 10,
-      ssl: process.env.DB_SSL || false
+      poolSize: process.env.DB_POOLSIZE && parseInt(process.env.DB_POOLSIZE) || 10,
+      ssl:  process.env.DB_SSL && JSON.parse(process.env.DB_SSL.toLowerCase()) || false
     }
   },
 
@@ -59,12 +59,13 @@ module.exports = {
     key: fs.readFileSync(process.env.SSL_KEY_PATH || 'key.pem'),
     cert: fs.readFileSync(process.env.SSL_CERT_PATH || 'cert.pem')
   },
-  hookTimeout: process.env.HOOK_TIMEOUT || 180000, // miliseconds
-  port: process.env.PORT || 1338,
-  environment: 'production',
+  hookTimeout: process.env.HOOK_TIMEOUT && parseInt(process.env.HOOK_TIMEOUT) || 180000, // miliseconds
+  port: process.env.PORT && parseInt(process.env.PORT) || 1338,
+  environment: 'development',
   log: {
     level: process.env.LOG_LEVEL || 'info'
   },
+  ggHost: process.env.GG_HOST || 'gluu.local.org',
   oxdWeb: process.env.OXD_SERVER_URL || 'https://localhost:8553',
   opHost: process.env.OP_SERVER_URL || 'https://gluu.local.org',
   oxdId: process.env.OXD_ID || '0cc5503c-6cce-4ba4-b6d7-0786b6d2d9c7',

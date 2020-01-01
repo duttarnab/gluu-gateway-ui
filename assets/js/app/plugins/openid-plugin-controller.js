@@ -261,7 +261,7 @@
         function getKongProxyURL() {
           var route = $scope.route;
           var protocol = route.protocols.indexOf("https") < 0 ? "http" : "https";
-          var host = (route.hosts && route.hosts[0]) || "localhost";
+          var host = $scope.globalInfo.ggHost;
 
           var port = '';
           $scope.info.configuration.proxy_listeners.forEach(function (v) {

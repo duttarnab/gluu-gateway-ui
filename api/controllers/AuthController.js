@@ -332,6 +332,7 @@ var AuthController = {
               user.clientId = sails.config.clientId;
               user.clientSecret = sails.config.clientSecret;
               user.oxdVersion = sails.config.oxdVersion;
+              user.ggHost = sails.config.ggHost;
 
               return res.status(200).send({
                 user: user,
