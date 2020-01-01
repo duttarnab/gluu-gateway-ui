@@ -3,7 +3,8 @@
 
   angular.module('frontend.routes', [
     'angular.chips',
-    'ngFileUpload'
+    'ngFileUpload',
+    'ui.bootstrap'
   ]);
 
   // Module configuration

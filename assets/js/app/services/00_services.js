@@ -3,7 +3,8 @@
 
   angular.module('frontend.services', [
     'angular.chips',
-    'ngFileUpload'
+    'ngFileUpload',
+    'ui.bootstrap'
   ]);
 
   // Module configuration

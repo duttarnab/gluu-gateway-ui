@@ -19,6 +19,7 @@
           id: _service.id
         };
         $scope.addMoreHeader = addMoreHeader;
+        $scope.methods = ['GET', 'POST', 'DELETE', 'PUT', 'PATCH', 'OPTIONS', 'CONNECT', 'TRACE', 'HEAD'];
 
         console.log("$scope.route", $scope.route, _service.id);
 

@@ -22,6 +22,8 @@
           }
         }
 
+        $scope.methods = ['GET', 'POST', 'DELETE', 'PUT', 'PATCH', 'OPTIONS', 'CONNECT', 'TRACE', 'HEAD'];
+
         $scope.submit = function () {
           $scope.loading = true;
 
