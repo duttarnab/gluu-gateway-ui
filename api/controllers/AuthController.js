@@ -263,7 +263,7 @@ var AuthController = {
               }
             }
 
-            var sub = userInfo && userInfo.sub;
+            var sub = userInfo && (userInfo.user_name || userInfo.sub);
             console.log('userinfo: ', userInfo);
             if (!sub) {
               return Promise.reject({message: 'Failed to get sub claim.'});
@@ -356,7 +356,7 @@ var AuthController = {
             uri: sails.config.oxdWeb + '/get-authorization-url',
             body: {
               oxd_id: sails.config.oxdId,
-              scope: ['openid', 'permission']
+              scope: ['openid', 'permission', 'user_name', 'email']
             },
             resolveWithFullResponse: true,
             json: true
