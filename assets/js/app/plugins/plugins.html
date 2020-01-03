@@ -54,7 +54,6 @@
           <td ng-if="user.hasPermission($state.name.split('.')[0],'update')">
             <div class="check-toggle">
             <input
-              ng-if="!(item.name === 'ip-restriction' && item.service && item.service.id === gluuMetricsServiceId) && !(item.name === 'gluu-metrics' && !(item.service && item.service.id) && !(item.route && item.route.id))"
               bs-switch
               switch-on-color="primary"
               ng-change="updatePlugin(item)"
@@ -67,13 +66,12 @@
             <raw-view data-item="item"></raw-view>
           </td>
           <th>
-            <span ng-if="['gluu-oauth-pep', 'gluu-uma-pep', 'gluu-metrics'].indexOf(item.name) >= 0 || (item.name === 'ip-restriction' && item.service && item.service.id === gluuMetricsServiceId)">{{item.name}}</span>
-            <a href ng-if="!(item.name === 'ip-restriction' && item.service && item.service.id === gluuMetricsServiceId) && ['gluu-oauth-pep', 'gluu-uma-pep', 'gluu-metrics'].indexOf(item.name) == -1" ng-click="onEditPlugin(item)">{{item.name}}</a>
+            <span ng-if="['gluu-oauth-pep', 'gluu-uma-pep'].indexOf(item.name) >= 0">{{item.name}}</span>
+            <a href ng-if="['gluu-oauth-pep', 'gluu-uma-pep'].indexOf(item.name) == -1" ng-click="onEditPlugin(item)">{{item.name}}</a>
           </th>
           <td>{{::getContext(item)}}</td>
           <td>
-            <a data-ng-if="(item.service && item.service.id) && !(item.name === 'ip-restriction' && item.service && item.service.id === gluuMetricsServiceId)" data-ui-sref="services.edit({service_id:item.service.id})">{{item.service.id}}</a>
-            <span data-ng-if="(item.service && item.service.id) && (item.name === 'ip-restriction' && item.service && item.service.id === gluuMetricsServiceId)" data-ui-sref="services.edit({service_id:item.service.id})">{{item.service.id}}</span>
+            <a data-ng-if="(item.service && item.service.id)" data-ui-sref="services.edit({service_id:item.service.id})">{{item.service.id}}</a>
             <a data-ng-if="item.route && item.route.id" data-ui-sref="routes.edit({route_id:item.route.id})">{{item.route.id}}</a>
             <span data-ng-if="!(item.service && item.service.id) && !(item.route && item.route.id)"> All Entrypoints </span>
           </td>
@@ -95,7 +93,7 @@
               <i class="mdi mdi-delete"></i>
             </button>
 
-            <button data-ng-if="!(item.name === 'ip-restriction' && item.service && item.service.id === gluuMetricsServiceId) && ['gluu-oauth-auth', 'gluu-uma-auth', 'gluu-openid-connect', 'gluu-metrics'].indexOf(item.name) == -1" type="button" ng-click="deleteItem($index,item)" class="btn btn-danger btn-link">
+            <button data-ng-if="['gluu-oauth-auth', 'gluu-uma-auth', 'gluu-openid-connect'].indexOf(item.name) == -1" type="button" ng-click="deleteItem($index,item)" class="btn btn-danger btn-link">
               <i class="mdi mdi-delete"></i>
             </button>
           </td>

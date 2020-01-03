@@ -38,18 +38,13 @@
             <raw-view data-item="route"></raw-view>
           </td>
           <td>
-            <strong ng-if="route.service.name === 'gluu-org-metrics-service'">
-              ...{{ route.id.substring(route.id.length - 12, route.id.length) }}
-            </strong>
-            <strong ng-if="!(route.service.name === 'gluu-org-metrics-service')">
+            <strong>
               <a class="clickable" data-ui-sref="routes.edit({route_id:route.id})">{{ route.name || '...' + route.id.substring(route.id.length - 12, route.id.length) }}</a>
             </strong>
           </td>
           <td>{{ route.hosts.join(", ") || "-" }}</td>
           <td>
-            <span ng-if="route.service.name === 'gluu-org-metrics-service'">{{route.service.name ||
-              route.service.id}}</span>
-            <a ng-if="!(route.service.name === 'gluu-org-metrics-service')" data-ui-sref="services.edit({service_id:route.service.id})">{{route.service.name ||
+            <a data-ui-sref="services.edit({service_id:route.service.id})">{{route.service.name ||
             route.service.id}}</a>
           </td>
           <td>{{ route.paths.join(", ") || "-" }}</td>
@@ -74,11 +69,11 @@
             <span data-ng-if="route.plugins.length < 1">-</span>
           </td>
           <td>
-            <a ng-if="!(route.service.name === 'gluu-org-metrics-service')" class="btn btn-info btn-link" ui-sref="routes.edit({ route_id: route.id })"
+            <a class="btn btn-info btn-link" ui-sref="routes.edit({ route_id: route.id })"
                class="btn btn-default btn-link">
               <i class="mdi mdi-pencil"></i>
             </a>
-            <button ng-if="!(route.service.name === 'gluu-org-metrics-service')" type="button" ng-click="deleteItem($index,route)" class="btn btn-danger btn-link">
+            <button type="button" ng-click="deleteItem($index,route)" class="btn btn-danger btn-link">
               <i class="mdi mdi-delete"></i>
             </button>
           </td>

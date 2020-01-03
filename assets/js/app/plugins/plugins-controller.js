@@ -101,16 +101,6 @@
             size: $scope.itemsFetchSize
           }).then(function (response) {
             $scope.items = response;
-            ServiceService.findByName('gluu-org-metrics-service')
-              .then(function (response) {
-                $scope.loading = false;
-                $scope.gluuMetricsServiceId = response.data && response.data.id;
-              })
-              .catch(function (error) {
-                $scope.loading = false;
-                console.log('Failed to get service', error)
-              });
-
           })
         }
 
