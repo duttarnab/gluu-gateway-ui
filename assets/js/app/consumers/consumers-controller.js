@@ -98,13 +98,14 @@
               function handleErrors(err) {
                 $scope.errors = {};
                 if (err.data && err.data.body) {
+                  MessageService.error(err.data.body.message);
                   if (err.data.body.fields) {
                     Object.keys(err.data.body.fields).forEach(function (key) {
-                      $scope.errors[key] = err.data.body.fields[key]
+                      MessageService.error(key + " : " + err.data.body.fields[key]);
                     })
                   } else {
                     Object.keys(err.data.body).forEach(function (key) {
-                      $scope.errors[key] = err.data.body[key]
+                      MessageService.error(err.data.body[key]);
                     })
                   }
                 }
