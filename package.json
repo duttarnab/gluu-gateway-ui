@@ -82,7 +82,8 @@
     "production": "node --harmony app.js --prod",
     "debug": "node debug app.js",
     "test": "mocha",
-    "bower-deps": "bower --allow-root install"
+    "bower-deps": "bower --allow-root install",
+    "db-migrate": "export NODE_ENV=production && /bin/bash ./start.sh -c prepare -a postgres -u "
   },
   "main": "app.js",
   "repository": {

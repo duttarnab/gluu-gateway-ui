@@ -20,7 +20,7 @@ if [ $# -eq 0 ]
 
         if [ "$COMMAND" == "prepare" ]
             then
-                node /opt/gluu-gateway-ui/bin/konga.js $COMMAND --adapter $ADAPTER --uri $URI
+                node ./bin/konga.js $COMMAND --adapter $ADAPTER --uri $URI
             else
                 echo "Invalid command: $COMMAND Please use prepare"
                 exit 1
