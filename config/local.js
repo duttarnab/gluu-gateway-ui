@@ -72,7 +72,7 @@ module.exports = {
   clientId: process.env.CLIENT_ID || '2f113bf1-224b-463e-b3d5-0e779333efda',
   clientSecret: process.env.CLIENT_SECRET || 'a5263b14-0afb-4a59-b42a-81d656e8717c',
   oxdVersion: process.env.OXD_SERVER_VERSION || '4.0',
-  ggVersion: process.env.GG_VERSION || '4.0',
+  ggVersion: process.env.GG_VERSION || '4.1',
   postgresVersion: process.env.POSTGRES_VERSION || '10.x',
   explicitHost: process.env.EXPLICIT_HOST || '0.0.0.0',
 };
