@@ -133,7 +133,8 @@ var AuthController = {
           },
           uri: sails.config.oxdWeb + '/get-logout-uri',
           body: {
-            oxd_id: sails.config.oxdId
+            oxd_id: sails.config.oxdId,
+            post_logout_redirect_uri: "https://" + sails.config.ggHost + ":" + sails.config.port
           },
           resolveWithFullResponse: true,
           json: true
@@ -356,7 +357,8 @@ var AuthController = {
             uri: sails.config.oxdWeb + '/get-authorization-url',
             body: {
               oxd_id: sails.config.oxdId,
-              scope: ['openid', 'permission', 'user_name', 'email']
+              scope: ['openid', 'permission', 'user_name', 'email'],
+              redirect_uri: "https://" + sails.config.ggHost + ":" + sails.config.port
             },
             resolveWithFullResponse: true,
             json: true
