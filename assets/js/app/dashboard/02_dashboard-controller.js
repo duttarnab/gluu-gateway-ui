@@ -13,6 +13,7 @@
       function controller($scope, $rootScope, $log, $state, $q, InfoService, $localStorage, HttpTimeout,
                           SettingsService, NodeModel, $timeout, MessageService, UserModel, UserService, Semver, ConsumerService, PluginsService, $window) {
         $scope.globalInfo = $localStorage.credentials.user;
+        $scope.gg_version = window.gg_version;
         $scope.postgres_version = window.postgres_version;
         $scope.itemsPerPage = 10;
         var loadTime = $rootScope.KONGA_CONFIG.info_polling_interval,

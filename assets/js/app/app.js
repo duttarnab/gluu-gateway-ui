@@ -294,7 +294,7 @@
                 UserService, InfoService, AuthService, SubscriptionsService, NotificationsService) {
 
         $rootScope.user = UserService.user()
-        $rootScope.konga_version = window.konga_version
+        $rootScope.gg_version = window.gg_version
         $log.debug("MainController:User => ", $rootScope.user)
 
         // ToDo decide whether to use Gateway Info for getting active node version and stuff...
