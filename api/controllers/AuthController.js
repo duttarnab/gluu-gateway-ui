@@ -358,7 +358,7 @@ var AuthController = {
             body: {
               oxd_id: sails.config.oxdId,
               scope: ['openid', 'permission', 'user_name', 'email'],
-              redirect_uri: "https://" + sails.config.ggHost + ":" + sails.config.port
+              redirect_uri: "https://" + sails.config.explicitHost + ":" + sails.config.port
             },
             resolveWithFullResponse: true,
             json: true
