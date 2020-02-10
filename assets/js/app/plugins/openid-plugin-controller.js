@@ -43,7 +43,7 @@
         $scope.addCustomHeader = addCustomHeader;
 
         $scope.pluginConfig = {
-          isPEPEnabled: true
+          isPEPEnabled: false
         };
         $scope.isPluginAdded = false;
         $scope.alreadyAddedUMAExpression = false;
@@ -216,7 +216,7 @@
                 }]
               }
             ],
-            isACRExpEnabled: true,
+            isACRExpEnabled: false,
             max_id_token_age_value: 60,
             max_id_token_auth_age_value: 60,
             max_id_token_age_type: 'minutes',
