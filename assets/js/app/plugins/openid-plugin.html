@@ -60,6 +60,12 @@
                   <input ng-model="pluginConfig.oxd_url" class="form-control"/>
                 </div>
               </div>
+              <div class="form-group" ng-if="!isPluginAdded">
+                <label class="col-sm-2 control-label">Client Name</label>
+                <div class="col-sm-10">
+                  <input ng-model="pluginConfig.client_name" class="form-control"/>
+                </div>
+              </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">Login URL</label>
                 <div class="col-sm-5">

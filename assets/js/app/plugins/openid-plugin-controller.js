@@ -540,7 +540,7 @@
             .then(function (response) {
               return PluginsService
                 .addOPClient({
-                  client_name: 'gg-openid-connect-client',
+                  client_name: model.client_name,
                   op_host: model.op_url,
                   oxd_url: model.oxd_url,
                   redirect_uris: [model.kong_proxy_url + model.authorization_redirect_path],
