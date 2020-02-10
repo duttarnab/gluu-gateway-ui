@@ -205,14 +205,14 @@
             post_logout_redirect_path_or_url: '/logout_redirect_uri',
             post_logout_redirect_uri: '',
             requested_scopes: ['openid', 'oxd', 'email', 'profile', 'uma_protection'],
-            required_acrs: ['auth_ldap_server'],
+            required_acrs: [],
             required_acrs_expression: [
               {
                 path: "/??",
                 conditions: [{
                   httpMethods: ["?"],
                   apply_auth: true,
-                  required_acrs: ["auth_ldap_server"]
+                  required_acrs: []
                 }]
               }
             ],
@@ -397,6 +397,7 @@
           }
 
           if (model.required_acrs_expression && model.required_acrs_expression.length > 0) {
+            var requiredACRFlag = true;
             model.required_acrs = [];
             model.required_acrs_expression.forEach(function (path, pIndex) {
               path.conditions.forEach(function (cond, cIndex) {
@@ -406,6 +407,9 @@
                 if (!apply_auth) {
                   return
                 }
+                if (!cond.required_acrs.length) {
+                  requiredACRFlag = false
+                }
                 cond.required_acrs.forEach(function (acr) {
                   if (model.required_acrs.indexOf(acr) < 0) {
                     model.required_acrs.push(acr);
@@ -413,6 +417,11 @@
                 })
               });
             });
+
+            if (!requiredACRFlag) {
+              MessageService.error('At least one acr(auth method) is required for acr expression');
+              return
+            }
           } else {
             delete model.required_acrs
           }
@@ -968,9 +977,9 @@
           $scope.pluginConfig.required_acrs_expression.push({
             path: "/??",
             conditions: [{
-              httpMethods: ["?"],
+              httpMethods: ["GET"],
               apply_auth: true,
-              required_acrs: ["auth_ldap_server"]
+              required_acrs: []
             }]
           });
         }
@@ -978,9 +987,9 @@
         function addACRNewCondition(pIndex) {
           $scope.pluginConfig.required_acrs_expression[pIndex].conditions.push(
             {
-              httpMethods: ["?"],
+              httpMethods: ["GET"],
               apply_auth: true,
-              required_acrs: ["auth_ldap_server"]
+              required_acrs: []
             }
           );
         }
@@ -1227,7 +1236,7 @@
           if (!cond.apply_auth && cond.required_acrs) {
             delete cond.required_acrs
           } else {
-            cond.required_acrs = ['auth_ldap_server']
+            cond.required_acrs = []
           }
         }
 
