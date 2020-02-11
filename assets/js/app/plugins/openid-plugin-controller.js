@@ -42,6 +42,9 @@
         $scope.authSwitchClicked = authSwitchClicked;
         $scope.addCustomHeader = addCustomHeader;
 
+        var route = $scope.route;
+        $scope.path = (route.paths && route.paths[0]) || "";
+
         $scope.pluginConfig = {
           isPEPEnabled: false
         };
@@ -208,7 +211,7 @@
             required_acrs: [],
             required_acrs_expression: [
               {
-                path: "/??",
+                path: $scope.path + "/??",
                 conditions: [{
                   httpMethods: ["?"],
                   apply_auth: true,
@@ -284,12 +287,10 @@
         }
 
         function setURLs() {
-          var route = $scope.route;
-          var path = (route.paths && route.paths[0]) || "";
-          $scope.pluginConfig.authorization_redirect_path = path + "/callback";
-          $scope.pluginConfig.post_logout_redirect_path_or_url = path + "/logout_redirect_uri";
-          $scope.pluginConfig.logout_path = path + "/logout";
-          $scope.pluginConfig.claims_redirect_path = path + "/claims_callback";
+          $scope.pluginConfig.authorization_redirect_path = $scope.path + "/callback";
+          $scope.pluginConfig.post_logout_redirect_path_or_url = $scope.path + "/logout_redirect_uri";
+          $scope.pluginConfig.logout_path = $scope.path + "/logout";
+          $scope.pluginConfig.claims_redirect_path = $scope.path + "/claims_callback";
         }
 
         function setClaimPath() {
@@ -547,7 +548,6 @@
                   post_logout_redirect_uris: [model.post_logout_redirect_uri],
                   claims_redirect_uri: [model.kong_proxy_url + model.claims_redirect_path],
                   scope: model.requested_scopes,
-                  acr_values: model.required_acrs || null,
                   route_id: $scope.route.id,
                   comment: model.comment,
                   uma_scope_expression: model.uma_scope_expression || [],
@@ -622,7 +622,6 @@
               post_logout_redirect_uris: [model.post_logout_redirect_uri],
               claims_redirect_uri: [model.kong_proxy_url + model.claims_redirect_path],
               scope: model.requested_scopes,
-              acr_values: model.required_acrs || null,
               alreadyAddedUMAExpression: $scope.alreadyAddedUMAExpression || false,
             })
             .then(function (response) {
@@ -944,7 +943,7 @@
 
         function addNewPath() {
           $scope.pluginConfig.uma_scope_expression.push({
-            path: ($scope.route.paths && $scope.route.paths[0]) || '',
+            path: $scope.path + "/??",
             pathIndex: $scope.pluginConfig.uma_scope_expression.length,
             conditions: [
               {
@@ -975,7 +974,7 @@
 
         function addACRNewPath() {
           $scope.pluginConfig.required_acrs_expression.push({
-            path: "/??",
+            path: $scope.path + "/??",
             conditions: [{
               httpMethods: ["GET"],
               apply_auth: true,
