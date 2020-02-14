@@ -788,20 +788,24 @@
               $scope.paths = [
                 {
                   path: '/??',
-                  allow: ['/folder/file.ext', '/folder/file2', 'Allow all the paths'],
+                  allow: ['/folder/file.ext', '/folder/file2', 'Apply security on all the paths'],
                   deny: []
                 }, {
                   path: '/folder/file.ext',
                   allow: ['/folder/file.ext'],
                   deny: ['/folder/file']
                 }, {
+                  path: '/folder/file',
+                  allow: ['/folder/file'],
+                  deny: ['/folder/file/', '/folder/file/123', '/folder/file/xyx', 'So it will be good to use /?? wild card if you want to secure sub folders']
+                }, {
                   path: '/folder/?/file',
                   allow: ['/folder/123/file', '/folder/xxx/file'],
                   deny: []
                 }, {
                   path: '/path/??',
-                  allow: ['/path/', '/path/xxx', '/path/xxx/yyy/file'],
-                  deny: ['/path - Need slash at last']
+                  allow: ['/path', '/path/', '/path/xxx', '/path/xxx/yyy/file'],
+                  deny: []
                 }, {
                   path: '/path/??/image.jpg',
                   allow: ['/path/one/two/image.jpg', '/path/image.jpg'],
