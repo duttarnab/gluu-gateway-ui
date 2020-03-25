@@ -160,8 +160,11 @@
                     });
                 });
             }
-          }
+          },
 
+          isMultipleQuestions: function(path) {
+            return path.indexOf("??") !== path.lastIndexOf("??");
+          }
         };
       }
     ])

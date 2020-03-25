@@ -600,6 +600,11 @@
             var dIndex = 0;
             var sData = [];
             model.config.oauth_scope_expression.forEach(function (path, pIndex) {
+              if(PluginHelperService.isMultipleQuestions(path.path || "")) {
+                MessageService.error("Multiple ?? wildcard are not allowed in path " + path.path);
+                throw "Multiple ?? wildcard are not allowed in path ";
+              }
+
               path.conditions.forEach(function (cond, cIndex) {
                 dIndex = 0;
                 sData = [];

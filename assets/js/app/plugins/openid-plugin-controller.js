@@ -398,9 +398,14 @@
           }
 
           if (model.required_acrs_expression && model.required_acrs_expression.length > 0) {
-            var requiredACRFlag = true;
+            var requiredACRFlag = true, isMultipleQuestionInPath = false;
             model.required_acrs = [];
             model.required_acrs_expression.forEach(function (path, pIndex) {
+              if(PluginHelperService.isMultipleQuestions(path.path || "")) {
+                MessageService.error("Multiple ?? wildcard are not allowed in ACR Expression path " + path.path);
+                isMultipleQuestionInPath = true;
+              }
+
               path.conditions.forEach(function (cond, cIndex) {
                 var apply_auth = angular.copy(cond.apply_auth);
                 cond.no_auth = !cond.apply_auth;
@@ -421,6 +426,9 @@
 
             if (!requiredACRFlag) {
               MessageService.error('At least one acr(auth method) is required for acr expression');
+              return
+            }
+            if (isMultipleQuestionInPath) {
               return
             }
           } else {
@@ -1023,6 +1031,11 @@
             var dIndex = 0;
             var sData = [];
             model.uma_scope_expression.forEach(function (path, pIndex) {
+              if(PluginHelperService.isMultipleQuestions(path.path || "")) {
+                MessageService.error("Multiple ?? wildcard are not allowed in UMA expression path " + path.path);
+                throw "Multiple ?? wildcard are not allowed in UMA expression path ";
+              }
+
               path.conditions.forEach(function (cond, cIndex) {
                 dIndex = 0;
                 sData = [];
