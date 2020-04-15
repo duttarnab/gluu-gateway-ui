@@ -53,6 +53,8 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
           access_token_as_jwt: clientRequest.access_token_as_jwt || false,
           rpt_as_jwt: clientRequest.rpt_as_jwt || false,
           access_token_signing_alg: clientRequest.access_token_signing_alg || 'RS256',
+          allow_spontaneous_scopes: clientRequest.allow_spontaneous_scopes || false,
+          spontaneous_scopes: clientRequest.spontaneous_scopes || null,
         },
         resolveWithFullResponse: true,
         json: true
@@ -243,6 +245,11 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
       access_token_signing_alg: body.access_token_signing_alg || 'RS256',
       scope: body.scope
     };
+
+    if(body.allow_spontaneous_scopes) {
+      option.allow_spontaneous_scopes = body.allow_spontaneous_scopes;
+      option.spontaneous_scopes = body.spontaneous_scopes;
+    }
 
     this.registerClient(option)
       .then(function (clientInfo) {

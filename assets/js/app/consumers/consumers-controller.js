@@ -143,7 +143,9 @@
                 access_token_signing_alg: 'RS256',
                 oxd_url: globalInfo.oxdWeb,
                 op_host: globalInfo.opHost,
-                scope: ['openid', 'oxd', 'uma_protection']
+                scope: ['openid', 'oxd', 'uma_protection'],
+                allow_spontaneous_scopes: false,
+                spontaneous_scopes: []
               };
 
               $scope.close = close;
