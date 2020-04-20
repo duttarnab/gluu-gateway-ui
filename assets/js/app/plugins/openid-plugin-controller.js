@@ -402,7 +402,7 @@
             model.required_acrs = [];
             model.required_acrs_expression.forEach(function (path, pIndex) {
               if(PluginHelperService.isMultipleQuestions(path.path || "")) {
-                MessageService.error("Multiple ?? wildcard are not allowed in ACR Expression path " + path.path);
+                MessageService.error("Multiple ?? patterns are not supported in ACR Expression path " + path.path);
                 isMultipleQuestionInPath = true;
               }
 
@@ -1032,8 +1032,8 @@
             var sData = [];
             model.uma_scope_expression.forEach(function (path, pIndex) {
               if(PluginHelperService.isMultipleQuestions(path.path || "")) {
-                MessageService.error("Multiple ?? wildcard are not allowed in UMA expression path " + path.path);
-                throw "Multiple ?? wildcard are not allowed in UMA expression path ";
+                MessageService.error("Multiple ?? patterns are not allowed in UMA expression path " + path.path);
+                throw "Multiple ?? patterns are not allowed in UMA expression path ";
               }
 
               path.conditions.forEach(function (cond, cIndex) {

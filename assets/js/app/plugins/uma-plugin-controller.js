@@ -585,8 +585,8 @@
             var sData = [];
             model.config.uma_scope_expression.forEach(function (path, pIndex) {
               if(PluginHelperService.isMultipleQuestions(path.path || "")) {
-                MessageService.error("Multiple ?? wildcard are not allowed in path " + path.path);
-                throw "Multiple ?? wildcard are not allowed in path ";
+                MessageService.error("Multiple ?? patterns are not allowed in path " + path.path);
+                throw "Multiple ?? patterns are not allowed in path ";
               }
 
               path.conditions.forEach(function (cond, cIndex) {

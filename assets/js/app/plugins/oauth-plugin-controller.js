@@ -601,8 +601,8 @@
             var sData = [];
             model.config.oauth_scope_expression.forEach(function (path, pIndex) {
               if(PluginHelperService.isMultipleQuestions(path.path || "")) {
-                MessageService.error("Multiple ?? wildcard are not allowed in path " + path.path);
-                throw "Multiple ?? wildcard are not allowed in path ";
+                MessageService.error("Multiple ?? patterns in path are not supported " + path.path);
+                throw "Multiple ?? patterns in path are not supported ";
               }
 
               path.conditions.forEach(function (cond, cIndex) {
