@@ -251,7 +251,8 @@
               format: 'jwt',
               iterate: false,
               sep: ' ',
-            }]
+            }],
+            restore_original_auth_params: false
           };
           setURLs();
         }
@@ -512,7 +513,8 @@
               required_acrs_expression: (model.required_acrs_expression && JSON.stringify(model.required_acrs_expression)) || null,
               max_id_token_age: max_id_token_age,
               max_id_token_auth_age: max_id_token_auth_age,
-              custom_headers: model.custom_headers || []
+              custom_headers: model.custom_headers || [],
+              restore_original_auth_params: model.restore_original_auth_params || false
             }
           };
 
@@ -659,6 +661,7 @@
                   max_id_token_age: max_id_token_age,
                   max_id_token_auth_age: max_id_token_auth_age,
                   custom_headers: model.custom_headers || [],
+                  restore_original_auth_params: model.restore_original_auth_params || false
                 }
               };
 
