@@ -116,7 +116,9 @@
                          type="checkbox"
                          switch-on-text="YES"
                          switch-off-text="NO" />
-                  <p class="help-block">It use to Handle <code>POST request</code> after OpenID Connect authentication and redirects. Plugin store the request object and after auth plugin will redirect with the same POST requested parameters. </p>
+                  <p class="help-block">
+                    It use to restore original request's method, content-related headers, and body after successful redirection from OP. It is useful if original request has methods like <code> POST, PUT, PATCH, DELETE</code>.
+                  </p>
                 </div>
               </div>
               <div class="form-group">
