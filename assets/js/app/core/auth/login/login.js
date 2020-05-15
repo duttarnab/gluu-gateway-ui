@@ -62,7 +62,7 @@
               function (response) {
                 MessageService.success('You have logged in successfully!');
                 $localStorage.credentials = response.data;
-                window.location = window.location.origin + '#!/dashboard'
+                window.location = window.location.origin + window.location.pathname + '#!/dashboard'
                 $scope.busy = false;
               })
             .catch(function errorCallback(err) {
