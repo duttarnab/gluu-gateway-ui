@@ -126,6 +126,11 @@ var AuthController = {
           return Promise.reject(tokenData)
         }
 
+        var redirect_uri = "https://" + sails.config.ggUIRedirectURLHost;
+        if (sails.config.port != 443) {
+          redirect_uri += ":" + sails.config.port
+        }
+
         const option = {
           method: 'POST',
           headers: {
@@ -134,7 +139,7 @@ var AuthController = {
           uri: sails.config.oxdWeb + '/get-logout-uri',
           body: {
             oxd_id: sails.config.oxdId,
-            post_logout_redirect_uri: "https://" + sails.config.ggUIRedirectURLHost + ":" + sails.config.port
+            post_logout_redirect_uri: redirect_uri
           },
           resolveWithFullResponse: true,
           json: true
@@ -349,6 +354,11 @@ var AuthController = {
 
       return getClientAccessToken()
         .then(function (token) {
+          var redirect_uri = "https://" + sails.config.ggUIRedirectURLHost;
+          if (sails.config.port != 443) {
+            redirect_uri += ":" + sails.config.port
+          }
+
           const option = {
             method: 'POST',
             headers: {
@@ -358,7 +368,7 @@ var AuthController = {
             body: {
               oxd_id: sails.config.oxdId,
               scope: ['openid', 'permission', 'user_name', 'email'],
-              redirect_uri: "https://" + sails.config.ggUIRedirectURLHost + ":" + sails.config.port
+              redirect_uri: redirect_uri
             },
             resolveWithFullResponse: true,
             json: true
