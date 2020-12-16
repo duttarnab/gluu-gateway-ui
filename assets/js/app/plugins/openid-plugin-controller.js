@@ -101,6 +101,8 @@
             $scope.pluginConfig.isPEPEnabled = true;
             $scope.alreadyAddedUMAExpression = true;
             $scope.pluginConfig.deny_by_default = pepPlugin.config.deny_by_default;
+            $scope.pluginConfig.read_claims_from_pct = pepPlugin.config.read_claims_from_pct;
+            $scope.pluginConfig.claims_gathering_pct_value = pepPlugin.config.claims_gathering_pct_value || "";
             $scope.pluginConfig.redirect_claim_gathering_url = pepPlugin.config.redirect_claim_gathering_url || false;
             $scope.pluginConfig.claims_redirect_path = pepPlugin.config.claims_redirect_path || "";
             $scope.pluginConfig.pushed_claims_lua_exp = pepPlugin.config.pushed_claims_lua_exp;
@@ -184,6 +186,8 @@
             $scope.pluginConfig.isPEPEnabled = false;
             $scope.pluginConfig.uma_scope_expression = [];
             $scope.pluginConfig.deny_by_default = true;
+            $scope.pluginConfig.read_claims_from_pct = false;
+            $scope.pluginConfig.claims_gathering_pct_value = "";
             $scope.pluginConfig.require_id_token = true;
             $scope.pluginConfig.redirect_claim_gathering_url = false;
             $scope.pluginConfig.claims_redirect_path = "";
@@ -194,6 +198,8 @@
           $scope.pluginConfig = {
             isPEPEnabled: $scope.pluginConfig.isPEPEnabled,
             deny_by_default: true,
+            read_claims_from_pct: false,
+            claims_gathering_pct_value: '',
             kong_proxy_url: '',
             redirect_claim_gathering_url: true,
             claims_redirect_path: '/claims_callback',
@@ -533,6 +539,8 @@
                 oxd_url: model.oxd_url,
                 uma_scope_expression: JSON.stringify(model.uma_scope_expression),
                 deny_by_default: model.deny_by_default || false,
+                read_claims_from_pct: model.read_claims_from_pct || false,
+                claims_gathering_pct_value: model.claims_gathering_pct_value || null,
                 require_id_token: model.require_id_token || false,
                 obtain_rpt: true,
                 redirect_claim_gathering_url: model.redirect_claim_gathering_url || false,
@@ -700,6 +708,8 @@
                   oxd_url: model.oxd_url,
                   uma_scope_expression: JSON.stringify(model.uma_scope_expression),
                   deny_by_default: model.deny_by_default || false,
+                  read_claims_from_pct: model.read_claims_from_pct || false,
+                  claims_gathering_pct_value: model.claims_gathering_pct_value || null,
                   require_id_token: model.require_id_token || false,
                   obtain_rpt: true,
                   redirect_claim_gathering_url: model.redirect_claim_gathering_url || false,
