@@ -272,6 +272,9 @@
           var route = $scope.route;
           var protocol = route.protocols.indexOf("https") < 0 ? "http" : "https";
           var host = $scope.globalInfo.ggHost;
+          if(host.endsWith('/')) {
+            host = host.slice(0, -1);
+          }
 
           var port = '';
           $scope.info.configuration.proxy_listeners.forEach(function (v) {
