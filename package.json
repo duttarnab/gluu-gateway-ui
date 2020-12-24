@@ -20,7 +20,7 @@
     "bower": "^1.8.0",
     "csv-parser": "^1.11.0",
     "dotenv": "^8.2.0",
-    "ejs": "^2.5.6",
+    "ejs": "^3.1.5",
     "fs": "0.0.1-security",
     "google-auth-library": "^0.10.0",
     "googleapis": "^59.0.0",
@@ -59,7 +59,7 @@
     "rc": "^1.2.8",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "sails": "~0.12.14",
+    "sails": "^1.4.0",
     "sails-disk": "^0.10.10",
     "sails-hook-validation": "0.4.6",
     "sails-mongo": "^1.0.1",
@@ -67,7 +67,7 @@
     "sails-postgresql": "^0.11.4",
     "sails-sqlserver": "^0.10.8",
     "sendmail": "^1.1.1",
-    "unirest": "^0.5.1",
+    "unirest": "^0.6.0",
     "validator": "4.2.1"
   },
   "devDependencies": {
