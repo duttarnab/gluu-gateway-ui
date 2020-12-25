@@ -60,7 +60,7 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "sails": "^1.4.0",
-    "sails-disk": "^0.10.10",
+    "sails-disk": "^2.1.0",
     "sails-hook-validation": "0.4.6",
     "sails-mongo": "^1.2.0",
     "sails-mysql": "^1.0.1",
